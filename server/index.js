@@ -1,22 +1,25 @@
-const express = require("express");
-const app = express();
-const port = 8000;
+import app from "./src/server.js";
+import mongoose from "mongoose";
+import config from "./config/config.js";
+import {createServer} from "http"
+import {Server} from 'socket.io'
 
-app.use(function (req, res, next) {
-  console.log("Start");
-  next();
-});
+const server = createServer(app)
+const io = new Server(server)
 
-app.use("/", function (req, res) {
-    console.log("End");
-  });
-  
-//Route handler
-app.get("/", function (req, res, next) {
-  res.send("Middle");
-  next();
-});
+mongoose
+  .connect(`mongodb+srv://${config.DB_USERNAME}:leanhvu123@cluster0.zsjsdin.mongodb.net/messv2`,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(()=>console.log('connectOK'))
+  .catch((err) => console.log(err))
 
-app.listen(port, () => {
-  console.log(`listen port at ${port}`);
-});
+io.on('connection',(socket)=>{
+  console.log('connect socket sussesfully');
+})
+
+server.listen(8000,()=>{
+  console.log(`okal${config.PORT}`)
+})
+ 
