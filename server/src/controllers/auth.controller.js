@@ -1,55 +1,67 @@
-import { User } from "../models/userModel.js";
-import { hashSync, genSaltSync, compareSync } from "bcrypt";
-import jwt from "jsonwebtoken";
-import config from "../../config/config.js";
+import { UserService } from "../services/userService.js";
+import { ResponseHandler } from "../constants/response.js";
+import mongoose from "mongoose";
 
 export const register = async (req, res) => {
   const { username, password, displayName } = req.body;
-  if (!(username && password && displayName)) {
-    res.status(400).send("Require user input!");
-  }
-  const existUser = await User.findOne({ username: username });
-  if (existUser) {
-    res.status(409).send("User already exist. Please login!");
+  if ((await UserService.existUsername(username)) !== null) {
+    return res.send(ResponseHandler.ExistUserName);
   }
 
-  const salt = genSaltSync(10);
-  const hashedPassword = hashSync(password, salt);
+  const _id = new mongoose.Types.ObjectId();
 
-  const accessToken = jwt.sign(
-    { username: username },
-    config.ACCESS_TOKEN_SCERET, 
-    { expiresIn: "1m" }
-  );
+  const accessToken = UserService.generateAccessToken(_id.toString());
+  const refreshToken = UserService.generateRefreshToken(_id.toString());
 
-  const refreshToken = jwt.sign(
-    { username: username },
-    config.REFRESH_TOKEN_SCERET,
-    { expiresIn: "1h" }
-  );
-  await User.create({
-    password: hashedPassword,
+  const user = await UserService.createUser(
+    _id,
     username,
+    password,
     displayName,
-  });
+    refreshToken
+  );
+  console.log(user);
 
-  res.cookie("jwt", refreshToken, {
+  res.cookie("jwtAccessToken", accessToken, {
     httpOnly: true,
-    secure: true,
-    maxAge: 2 * 1000,
+    maxAge: 6000,
+  });
+  res.cookie("jwtRefreshToken", refreshToken, {
+    httpOnly: true,
+    maxAge: 9000000,
   });
 
-  
-  return res.send({
-    status: "OK",
-    accessToken: accessToken,
-  });
-}; 
+  res.send(ResponseHandler.RegisterSussesfully);
+};
 
 export const login = async (req, res) => {
   const { username, password } = req.body;
-  const existUser = await User.findOne({ username: username });
-  if (existUser) {
-    res.status(409).send("User already exist. Please login!");
+
+  const user = await UserService.verifyAccount(username, password);
+
+  if (user === null) {
+    res.send(ResponseHandler.UserDoesNotExist);
   }
+
+  const accessToken = UserService.generateAccessToken(user._id.toString());
+  const refreshToken = UserService.generateRefreshToken(user._id.toString());
+
+  res.cookie("jwtAccessToken", accessToken, {
+    httpOnly: true,
+    maxAge: 6000,
+  });
+
+  res.cookie("jwtRefreshToken", refreshToken, {
+    httpOnly: true,
+    maxAge: 9000000,
+  });
+
+  UserService.updateRefreshToken(user._id, refreshToken);
+  res.send(ResponseHandler.LoginSuccessfully);
+};
+
+export const logout = async (req, res) => {
+  res.clearCookie("jwtAccessToken");
+  res.clearCookie("jwtRefreshToken");
+  res.send("Logout successfully");
 };

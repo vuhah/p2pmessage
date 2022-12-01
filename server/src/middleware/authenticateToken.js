@@ -1,18 +1,20 @@
-import jwt from 'jsonwebtoken'
-import config from '../../config/config.js'
+import jwt from "jsonwebtoken";
+import config from "../../config/config.js";
+import { ResponseHandler } from "../constants/response.js";
 
-export function authenticateToken(req,res,next){
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    if (token==null) return res.send({err})
+export const authenticateToken = async (req, res, next) => {
+  const accessToken = req.headers.authorization.split(" ")[1];
+  if (accessToken == null) res.send(ResponseHandler.AccessTokenNotFound);
 
-    jwt.verify(token, config.ACCESS_TOKEN_SCERET, (err,user)=>{
-        if (err) return res.send(err)
-        req.user = user
-        console.log(req.user);
-        next()
-    })
-}   
-
-
-
+  jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET, (err, payload) => {
+    if (err) {
+      if ((err.message = "jwt expried")) {
+        req.message = "jwt expried accessToken";
+      }
+    }
+    if (payload) {
+      req.id = payload.id;
+    }
+  });
+  next();
+};

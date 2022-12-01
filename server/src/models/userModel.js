@@ -4,16 +4,8 @@ const userSchema = mongoose.Schema({
     password: {type:String, require:true},
     username: {type:String, require:true},
     displayName : {type: String, require: true},
-    rooms: [{
-        _id: Schema.Types.ObjectId,
-        otherUser: Schema.Types.ObjectId,
-        messages:[{
-            sender: Boolean,
-            content: String,
-            time: Date
-        }] 
-    }]
+    refreshToken: {type: String, require: true},
 })
 
 
-export const User = mongoose.model('user',userSchema)
+export const user = mongoose.model('user',userSchema)

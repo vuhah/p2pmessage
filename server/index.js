@@ -8,7 +8,7 @@ const server = createServer(app)
 const io = new Server(server)
 
 mongoose
-  .connect(`mongodb+srv://${config.DB_USERNAME}:leanhvu123@cluster0.zsjsdin.mongodb.net/messv2`,{
+  .connect(`mongodb+srv://${config.DB_USERNAME}:${config.DB_PASSWORD}@cluster0.zsjsdin.mongodb.net/messv2`,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
