@@ -1,48 +1,62 @@
-import Peer, { ConnectionType } from "peerjs";
-import { useState, useEffect } from "react";
-
-const peer = new Peer()
-peer.on("open", (userPeerID) => {
-  console.log(userPeerID);
-});
+import { useEffect, useRef, useState } from "react";
+import Peer from "peerjs";
 
 function App() {
-  const [destinationID, setDestinationID] = useState("");
-  const [datasent, setDatasent] = useState("");
-  const [dataReceive, setDataReceive] = useState("");
-  const [conn, setConn] = useState(peer.connect("")) 
+  const [peerId, setPeerId] = useState("");
+  const [remotePeerIdValue, setRemotePeerIdValue] = useState("");
+  const [message, setMessage] = useState("");
+  const peerInstance = useRef(null);
+  const connection = useRef(null);
+  const flagConn = useRef(false);
 
-  const handleSubmit = () => {
-    setConn(peer.connect(destinationID))
-    console.log(`connect to ${destinationID} successfully`);
-  }
+  useEffect(() => {
+    const peer = new Peer();
 
-  // useEffect(() => {
-  //   conn.on("open", function () {
-  //     // Receive messages
-  //     conn.on("data", function (data) {
-  //       setDataReceive(data)
-  //     });
+    peer.on("open", (id) => {
+      setPeerId(id);
+    });
 
-  //     // Send messages
-  //     conn.send("Hello!");
-  //   });
-  // },[]);
+    peer.on("connection", (conn) => {
+      if (flagConn.current === false) {
+        connection.current = peer.connect(conn.peer);
+        flagConn.current = true;
+      }
+      conn.on("data", (data) => {
+        console.log("Received", data);
+      });
+    });
 
-  const handleSentData = () => {
-    conn.on("open", () => {
-      conn.send(datasent)
-    })
-  }
+    peerInstance.current = peer;
+  }, []);
+
+  const connectPeer = () => {
+    flagConn.current = true;
+    connection.current = peerInstance.current.connect(remotePeerIdValue);
+  };
+
+  const sentmessage = () => {
+    connection.current.send(message);
+  };
 
   return (
-    <div>
-      <h1>{destinationID}</h1>
-      <input type="text" onChange={(e) => setDestinationID(e.target.value)} />
-      <button onClick={handleSubmit}>CONNECT</button>
-      <input type="text" onChange={e => setDatasent(e.target.value)}/>
-      <button onClick={handleSentData}>SENT</button>
-      <h2>{dataReceive}</h2>
+    <div className="App">
+      <h1>Current user id is {peerId}</h1>
+      <input
+        type="text"
+        value={remotePeerIdValue}
+        onChange={(e) => setRemotePeerIdValue(e.target.value)}
+      />
+
+      <button onClick={connectPeer}>Connect</button>
+
+      <br />
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+
+      <button onClick={sentmessage}>Call</button>
     </div>
   );
 }
