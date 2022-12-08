@@ -41,10 +41,11 @@ export const login = async (req, res) => {
 
   if (user === null) {
     res.send(ResponseHandler.UserDoesNotExist);
+    return
   }
 
-  const accessToken = UserService.generateAccessToken(user._id.toString());
-  const refreshToken = UserService.generateRefreshToken(user._id.toString());
+  const accessToken = UserService.generateAccessToken(user.id.toString());
+  const refreshToken = UserService.generateRefreshToken(user.id.toString());
 
   res.cookie("jwtAccessToken", accessToken, {
     httpOnly: true,

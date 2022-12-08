@@ -23,14 +23,20 @@ mongoose
   .then(() => console.log("connectOK"))
   .catch((err) => console.log(err));
 
-io.on("connection", (socket) => {
-  console.log("new client connected " + socket.id);
+const users = []
 
-  socket.on("clientrequest", () => {
-    socket.emit("serversend");
+io.on("connection", (socket) => {
+  socket.emit("hello, server day")
+
+  socket.on("clientsend", (data) => {
+    console.log(data);
+    users.push(data)
+    
+    socket.broadcast.emit("serversend", users);
   });
+
 });
 
 server.listen(8000, () => {
-  console.log(`okal${config.PORT}`);
+  console.log(`okal8000`);
 });

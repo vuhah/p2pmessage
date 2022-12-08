@@ -1,64 +1,61 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addConnections, setCurrentPeerID } from "./redux/peerSlice";
 import Peer from "peerjs";
+import { io } from "socket.io-client";
+import { Routes, Route, useRoutes } from "react-router-dom";
+import EntryPage from "./pages/entrypage";
+import HomeMessage from "./pages/home";
+
+const peer = new Peer();
+
+const socket = io("http://localhost:8000");
 
 function App() {
-  const [peerId, setPeerId] = useState("");
-  const [remotePeerIdValue, setRemotePeerIdValue] = useState("");
   const [message, setMessage] = useState("");
-  const peerInstance = useRef(null);
-  const connection = useRef(null);
-  const flagConn = useRef(false);
+  const dispatch = useDispatch();
+
+  const currentPeerID = useSelector((state) => state.peer.currentPeerID);
+  const connections = useSelector((state) => state.peer.connections);
 
   useEffect(() => {
-    const peer = new Peer();
-
     peer.on("open", (id) => {
-      setPeerId(id);
+      dispatch(
+        setCurrentPeerID({
+          currentPeerID: id,
+        })
+      );
+      socket.emit("clientsend", id);
     });
 
     peer.on("connection", (conn) => {
-      if (flagConn.current === false) {
-        connection.current = peer.connect(conn.peer);
-        flagConn.current = true;
-      }
       conn.on("data", (data) => {
-        console.log("Received", data);
+        console.log("Received from", conn.peer, data);
       });
     });
-
-    peerInstance.current = peer;
   }, []);
 
-  const connectPeer = () => {
-    flagConn.current = true;
-    connection.current = peerInstance.current.connect(remotePeerIdValue);
+  useEffect(() => {
+    socket.on("serversend", (data) => {
+      console.log("other peerID", data);
+    });
+  }, []);
+
+  const sentmessage = (connection) => {
+    connection.send(message);
   };
 
-  const sentmessage = () => {
-    connection.current.send(message);
-  };
+  const routes = useRoutes([
+    {
+      path:"/",
+      element: <EntryPage />
+    },{
+      path:"/homemessage",
+      element: <HomeMessage />
+    },
+  ])
 
-  return (
-    <div className="App">
-      <h1>Current user id is {peerId}</h1>
-      <input
-        type="text"
-        value={remotePeerIdValue}
-        onChange={(e) => setRemotePeerIdValue(e.target.value)}
-      />
-
-      <button onClick={connectPeer}>Connect</button>
-
-      <br />
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-
-      <button onClick={sentmessage}>Call</button>
-    </div>
-  );
+  return routes
 }
 
 export default App;
