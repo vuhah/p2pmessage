@@ -1,12 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import peerReducer from "./peerSlice";
 import { enableMapSet } from "immer";
+import entryPageReducer from "./entryPageSlice";
+import authReducer from "./authSlice"
 
 enableMapSet();
 
 export default configureStore({
   reducer: {
     peer: peerReducer,
+    entryPage: entryPageReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

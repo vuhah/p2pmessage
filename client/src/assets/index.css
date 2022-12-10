@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400&display=swap');
+
+*{
+    font-family: 'Quicksand', sans-serif;
+}
+
+.chatappintro{
+    margin-top: 132px;
+}
+
+.chatappintro .button{
+    position: relative;
+    width: 200px;
+    height: 40px;
+    
+    background: #807876;
+    border-radius: 0;
+    border: #6D6875;
+    margin-left: 10px;
+    margin-top: 32px;
+}
+
+.chatappintro .text{ 
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 30px;
+    /* identical to box height */
+    margin-top: 3px;
+    color: #FFFFFF;
+}

@@ -10,6 +10,7 @@ export function refreshToken(req, res, next) {
       if (err) {
         if (err.message == "jwt expired") {
           res.send(ResponseHandler.RefreshTokenHasExpried);
+          return
         }
         if (err.message == "jwt malformed") {
           res.send(ResponseHandler.RefreshTokenInvalid);

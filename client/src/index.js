@@ -6,7 +6,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
-import './styles/index.css';
+import './assets/index.css';
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

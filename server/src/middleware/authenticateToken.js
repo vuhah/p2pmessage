@@ -3,6 +3,11 @@ import config from "../../config/config.js";
 import { ResponseHandler } from "../constants/response.js";
 
 export const authenticateToken = async (req, res, next) => {
+  if (req.headers.authorization === null) {
+    console.log(req.headers.authorization);
+    res.send(ResponseHandler.AccessTokenNotFound);
+    return
+  }
   const accessToken = req.headers.authorization.split(" ")[1];
   if (accessToken == null) res.send(ResponseHandler.AccessTokenNotFound);
 
@@ -15,6 +20,7 @@ export const authenticateToken = async (req, res, next) => {
     if (payload) {
       req.id = payload.id;
     }
-  });
+  }); 
   next();
-};
+}; 
+ 

@@ -3,7 +3,7 @@ export const ResponseHandler = {
     messaga: "Require user input!",
   },
   ExistUserName: {
-    messaga: "Username already exist!"
+    message: "Username already exist!"
   },
   UserDoesNotExist: {
     message: "Username or Password is incorrect!",

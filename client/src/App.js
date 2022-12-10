@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addConnections, setCurrentPeerID } from "./redux/peerSlice";
 import Peer from "peerjs";
 import { io } from "socket.io-client";
-import { Routes, Route, useRoutes } from "react-router-dom";
+import { useRoutes, Routes, Route } from "react-router-dom";
 import EntryPage from "./pages/entrypage";
 import HomeMessage from "./pages/home";
 
@@ -17,6 +17,7 @@ function App() {
 
   const currentPeerID = useSelector((state) => state.peer.currentPeerID);
   const connections = useSelector((state) => state.peer.connections);
+  const authState = useSelector((state) => state.auth.authState)
 
   useEffect(() => {
     peer.on("open", (id) => {
@@ -54,8 +55,14 @@ function App() {
       element: <HomeMessage />
     },
   ])
-
+  
   return routes
+  // return (
+  //   <Routes>
+  //     <Route exact path="/" element={EntryPage}></Route>
+  //     <Route exac path="/homemessage" element={HomeMessage}></Route>
+  //   </Routes>
+  // )
 }
 
 export default App;
