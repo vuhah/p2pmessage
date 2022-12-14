@@ -10,7 +10,7 @@ export default function Intro() {
       <img src={chatappIntro} className="d-block" alt="" />
       <button
         type="submut"
-        className="button"
+        className="button me-3"
         onClick={() => dispatch(switchLoginPanel())}
       >
         <p className="text">LOGIN</p>

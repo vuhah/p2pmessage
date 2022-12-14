@@ -68,7 +68,7 @@ export default function RegisterPanel() {
           <label className="form-label">Display Name</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control form2"
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
             value={typingDisplayName}
@@ -79,7 +79,7 @@ export default function RegisterPanel() {
           <label className="form-label">Username</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control form2"
             aria-describedby="emailHelp"
             value={typingUsernanem}
             onChange={(e) => setTypingUsername(e.target.value)}
@@ -89,7 +89,7 @@ export default function RegisterPanel() {
           <label className="form-label">Password</label>
           <input
             type="password"
-            className="form-control"
+            className="form-control form2"
             id="exampleInputPassword1"
             value={typingPassword}
             onChange={(e) => setTypingPassword(e.target.value)}

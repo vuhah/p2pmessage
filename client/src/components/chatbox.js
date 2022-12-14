@@ -20,18 +20,6 @@ function arrayBufferToBase64(Arraybuffer, Filetype, fileName) {
     Filetype === 'pptx' ? 'application/pptx' : Filetype === 'csv' ? 'application/csv' : Filetype === 'docx' ? 'application/docx' :
       Filetype === 'jpg' ? 'application/jpg' : Filetype === 'png' ? 'application/png' : '';
   const url = `data:${mimType};base64,` + file;
- 
-  // url for the file
-  // this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-
-  // download the file
-    // const a = document.createElement('a');
-    // a.href = url;
-    // a.download = fileName;
-    // document.body.appendChild(a);
-    // a.click();
-    // document.body.removeChild(a);
-    // window.URL.revokeObjectURL(url);
   return (<a href={url} download={fileName}>{fileName}</a>)
 }
 

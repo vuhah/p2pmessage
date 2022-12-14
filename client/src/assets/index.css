@@ -11,16 +11,18 @@
 
 .chatappintro .button{
     position: relative;
-    width: 200px;
+    width: 100px;
     height: 40px;
     
-    background: #807876;
-    border-radius: 0;
+    background: #c0b7b6f8;
+    border-radius: 20px;
     border: #6D6875;
     margin-left: 10px;
     margin-top: 32px;
 }
-
+.button:hover{
+    background-color: #6D6875;
+}
 .chatappintro .text{ 
     font-family: 'Quicksand';
     font-style: normal;
@@ -31,3 +33,6 @@
     margin-top: 3px;
     color: #FFFFFF;
 }
+.form2{
+    border: 1px solid #777677bf !important;
+} 
