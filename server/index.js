@@ -23,20 +23,25 @@ mongoose
   .then(() => console.log("connectOK"))
   .catch((err) => console.log(err));
 
-const users = []
+const users = new Map();
 
 io.on("connection", (socket) => {
-  socket.emit("hello, server day")
+  socket.emit("hello, server day");
 
   socket.on("clientsend", (data) => {
     console.log(data);
-    users.push(data)
-    
-    socket.broadcast.emit("serversend", users);
+    if (data.userID !== null && data.userID !== "") {
+      users.set(data.userID,data.peerID)
+    }
+    console.log(users);
+    socket.broadcast.emit("serversend", Array.from(users,([userID, peerID]) => ({userID, peerID})));
+    socket.emit("serversend", Array.from(users,([userID, peerID]) => ({userID, peerID})));
   });
 
 });
-
+ 
 server.listen(8000, () => {
   console.log(`okal8000`);
 });
+
+            

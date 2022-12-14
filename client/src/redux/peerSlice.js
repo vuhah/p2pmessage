@@ -4,11 +4,11 @@ export const peerSlice = createSlice({
   name: "peer",
   initialState: {
     currentPeerID: "",
-    connections: []
+    connections: new Map()
   },
   reducers: {
     addConnections: (state, action) => {
-      state.connections.push(action.payload.connection);
+      state.connections.set(action.payload.userID, action.payload.connection);
     },
     setCurrentPeerID: (state, action) => {
       state.currentPeerID = action.payload.currentPeerID

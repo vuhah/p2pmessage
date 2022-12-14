@@ -1,11 +1,14 @@
 import { UserService } from "../services/userService.js";
 
 export const profile = async (req, res) => {
-  res.send(req.user);
+  const infoUser = await UserService.findUser(req.id)
+  res.status(200).send({
+    id: infoUser,
+    message: "Access Successfully!",
+  });
 };
 
 export const listUser = async (req, res) => {
   const displayNames = await UserService.alllUsers(req.id);
-  res.send(displayNames);
+  res.status(200).send(displayNames);
 };
- 

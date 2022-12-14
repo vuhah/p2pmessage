@@ -23,7 +23,7 @@ export class UserService {
 
   static generateAccessToken = (id) => {
     return jwt.sign({ id: id }, config.ACCESS_TOKEN_SECRET, {
-      expiresIn: "2m",
+      expiresIn: "20m",
     });
   };
 
@@ -74,4 +74,11 @@ export class UserService {
     );
     return displayNames;
   };
+  static findUser = async(userID) => {
+    const infouser = await user.findOne(
+      {_id: userID},
+      "_id displayName"
+    )
+    return infouser
+  }
 }

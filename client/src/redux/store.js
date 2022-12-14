@@ -3,6 +3,7 @@ import peerReducer from "./peerSlice";
 import { enableMapSet } from "immer";
 import entryPageReducer from "./entryPageSlice";
 import authReducer from "./authSlice"
+import chatReducer from "./chatSlice";
 
 enableMapSet();
 
@@ -11,6 +12,7 @@ export default configureStore({
     peer: peerReducer,
     entryPage: entryPageReducer,
     auth: authReducer,
+    chat: chatReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -28,6 +30,7 @@ export default configureStore({
         ignoredPaths: [
           "peer.peer",
           "peer.connections",
+          "chat.listUsers"
         ],
       },
     }),

@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { setAuthState } from "../redux/authSlice";
+import md5 from "md5";
 
 const notifyRegisterSuccess = () =>
   toast.success("🦄 Login Successfully!", {
@@ -44,22 +45,17 @@ export default function RegisterPanel() {
     try {
       const res = await axiosInstance.post("/auth/login", {
         username: typingUsernanem,
-        password: typingPassword,
+        password: md5(typingPassword),
       });
-
-      Cookies.set("jwtAccessToken", res.data.accessToken, {
-        // httpOnly: true,
-        expires: 0.1,
-      });
-      Cookies.set("jwtRefreshToken", res.data.refreshToken, {
-        // httpOnly: true,
-        expires: 7,
-      });
-
+      console.log(res);
       if (res.data.message === "Username or Password is incorrect!") {
         notifyExistUsername();
       }
       if (res.data.message === "Login Successfully") {
+        Cookies.set("jwtAccessToken", res.data.accessToken, {
+          // httpOnly: true,
+          expires: 1,
+        });
         notifyRegisterSuccess();
         dispatch(setAuthState({ authState: true }));
         navigate("/homemessage");
@@ -68,7 +64,7 @@ export default function RegisterPanel() {
       console.log("failed", err);
     }
   };
-
+ 
   return (
     <div className="registrationForm">
       <form>

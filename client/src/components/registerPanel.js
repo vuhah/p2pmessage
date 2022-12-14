@@ -6,6 +6,7 @@ import axiosInstance from "../config/axiosconfig";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import md5 from "md5"
 
 const notifyRegisterSuccess = () =>
   toast.success("🦄 Register Successfully!", {
@@ -42,42 +43,24 @@ export default function RegisterPanel() {
     try {
       const res = await axiosInstance.post("/auth/register", {
         username: typingUsernanem,
-        password: typingPassword,
+        password: md5(typingPassword),
         displayName: typingDisplayName,
       });
-      Cookies.set("jwtAccessToken", res.data.accessToken, {
-        // httpOnly: true,
-        expires: 0.1,
-      });
-      Cookies.set("jwtRefreshToken", res.data.refreshToken, {
-        // httpOnly: true,
-        expires: 7,
-      });
-
       if (res.data.message === "Username already exist!") {
         notifyExistUsername();
       }
       if (res.data.message === "Register Successfully") {
         notifyRegisterSuccess();
-      } 
-
-      // dispatch(switchIntro({}));
+        Cookies.set("jwtAccessToken", res.data.accessToken, {
+          expires: 1,
+        });
+      }
     } catch (err) {
       console.log("failed", err);
     }
   };
 
-  const handleClickLogout = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axiosInstance.get("/auth/logout");
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
-  
   return (
     <div className="registrationForm">
       <form>
@@ -121,13 +104,13 @@ export default function RegisterPanel() {
         <div className="d-flex justify-content-between">
           <button
             className="back d-block"
-            onClick={()=>dispatch(switchIntro({}))}
+            onClick={() => dispatch(switchIntro({}))}
           >
             Back
           </button>
           <button
             className="back d-block"
-            onClick={()=>dispatch(switchLoginPanel({}))}
+            onClick={() => dispatch(switchLoginPanel({}))}
           >
             LOG IN
           </button>

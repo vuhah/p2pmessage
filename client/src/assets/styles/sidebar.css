@@ -1,0 +1,74 @@
+.sidebar{
+    background: #FFE0CF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);    
+    height: 100%;
+    position: relative;
+}
+.avt{
+    width: 15%;
+}
+
+.username{
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 30px;
+}
+.search{
+    height: 40px;
+
+
+    background: #FFF0E8;
+    border-radius: 26px;
+    border:0;
+    font-size: 14px;
+}
+.listmessage{
+    height: 73vh;
+    width: 90%;
+    background: #FFF0E8;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    overflow-y:auto;
+    
+}
+.copyright{
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+}
+.style-1::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+} 
+.name{
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 19px;
+    /* identical to box height */
+    color: #1E1E1E;
+}
+.lastitme{
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 19px;
+    /* identical to box height */
+    color: #1E1E1E;
+}
+.userbox:hover{
+    background-color: #0000001F;
+    cursor: pointer;
+    border-radius: 0 10px 10px 0px;
+}
+.userbox2:hover{
+    background-color: #fff0e8cb;
+    cursor: pointer;
+    border-radius: 0 10px 10px 0px;
+}
+.searchPanel{
+    background-color: #ada7a5fa;
+    width: 80%;
+    border-radius: 20px ;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+}

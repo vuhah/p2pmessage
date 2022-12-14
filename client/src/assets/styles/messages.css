@@ -1,0 +1,12 @@
+.content{
+    background: rgba(109, 104, 117, 0.23);    
+}
+.message-me{
+    border-radius: 12px 5px 12px 12px;
+}
+.message-partner{
+    border-radius: 5px 12px 12px 12px;
+}
+.avt-5{
+    width: 40px;
+}
